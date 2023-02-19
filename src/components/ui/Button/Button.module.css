@@ -1,0 +1,19 @@
+.root {
+  @apply flex justify-center items-center;
+}
+
+.simple {
+  @apply bg-primary hover:bg-primary-2 text-accent-7 font-bold rounded;
+}
+
+.outline {
+  @apply bg-transparent text-accent-2 font-semibold border border-primary hover:border-transparent rounded;
+}
+
+.pill {
+  @apply bg-secondary hover:bg-secondary-2 text-accent-9 font-bold rounded-full;
+}
+
+.link {
+  @apply text-sky-500 hover:text-secondary-2 font-semibold underline;
+}

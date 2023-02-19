@@ -1,0 +1,3 @@
+.input {
+  @apply block py-2.5 px-0 w-full text-sm text-accent-9 bg-transparent border-0 border-b-2 border-accent-6 appearance-none dark:text-white dark:border-accent-6 dark:focus:border-primary focus:outline-none focus:ring-0 focus:border-primary;
+}

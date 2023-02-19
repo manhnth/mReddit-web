@@ -1,0 +1,23 @@
+.root {
+  @apply fixed bg-black bg-opacity-40 flex items-center inset-0 z-50 justify-center;
+}
+
+.modal {
+  @apply p-8 border border-primary-2 relative bg-primary rounded-lg;
+}
+
+.modal:focus {
+  @apply outline-none;
+}
+
+.close {
+  @apply transition ease-in-out duration-150 absolute right-0 top-0 m-3;
+}
+
+.close:hover {
+  @apply text-gray-500;
+}
+
+.close:focus {
+  @apply outline-none;
+}

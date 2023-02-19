@@ -1,0 +1,7 @@
+.userBox {
+  @apply inline-flex w-full justify-center rounded-md border border-transparent text-sm font-medium shadow-sm  focus:border focus:border-accent-5;
+}
+
+.list {
+  @apply absolute right-0 z-10 px-4 mt-2 w-max origin-top-right rounded-md bg-primary shadow-lg ring-1 ring-opacity-5 ring-accent-7;
+}
