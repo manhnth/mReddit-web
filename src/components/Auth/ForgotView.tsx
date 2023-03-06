@@ -5,6 +5,7 @@ import { InputField } from '../common/InputField';
 import { Button } from '../ui/Button';
 import redditLogo from '@/assets/reddit.png';
 import { useUI } from '../ui/context';
+import { Link } from 'react-router-dom';
 
 const ForgotSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
@@ -18,14 +19,14 @@ export const ForgotView: React.FC<LoginViewProps> = ({}) => {
   return (
     <div className="max-w-xs w-screen pt-4 pb-6 px-8">
       <div className="flex justify-center flex-col items-center gap-8">
-        <a href="" className="">
+        <Link to="../" className="">
           <img
             src={redditLogo}
             className="logo reddit"
             alt="Reddit logo"
             width={'45px'}
           />
-        </a>
+        </Link>
         <h1 className="font-semibold font-sans text-xl">Reset your password</h1>
       </div>
 

@@ -1,19 +1,30 @@
-import { Expand, Person } from '@/components/icons';
+import { DarkMode, Expand, Person } from '@/components/icons';
 import { Button } from '@/components/ui/Button';
-import { DROPDOWN_MENU } from '@/constants';
+import { getUserQuery, logOut } from '@/lib/auth';
 import React, { useEffect, useRef, useState } from 'react';
+import { useQuery } from 'react-query';
+import { useNavigate } from 'react-router-dom';
+import { ToggleTheme } from '../ToggleThemeButton';
 import s from './UserDropdown.module.css';
 
 interface UserNavProps {}
 
 export const UserNav: React.FC<UserNavProps> = ({}) => {
   const [displayDropdown, setDisplayDropdown] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const { data: user } = useQuery(getUserQuery());
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setDisplayDropdown(!displayDropdown);
   };
 
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const clickLogout = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    logOut();
+    navigate('/');
+    window.location.reload();
+  };
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent): void {
@@ -31,6 +42,7 @@ export const UserNav: React.FC<UserNavProps> = ({}) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [dropdownRef]);
+
   return (
     <div className="relative inline-block text-left border-0">
       <div>
@@ -47,41 +59,33 @@ export const UserNav: React.FC<UserNavProps> = ({}) => {
           </div>
         </button>
       </div>
+      {/* drop down list */}
       {displayDropdown && (
-        <div
-          ref={dropdownRef}
-          className={s.list}
-          role="menu"
-          aria-orientation="vertical"
-          aria-labelledby="menu-button"
-          tabIndex={-1}
-        >
+        <div ref={dropdownRef} className={s.list} role="menu" tabIndex={-1}>
           <div className="py-1" role="none">
-            {DROPDOWN_MENU.map((option, i) => (
+            <Button
+              variant="outline"
+              className="text-sm font-semibold flex gap-2 items-center border-none"
+            >
+              <>
+                <span>
+                  <DarkMode className="fill-accent-5" width={'20px'} />
+                </span>
+                <ToggleTheme />
+              </>
+            </Button>
+            {user && (
               <Button
-                key={i}
+                onClick={(e) => clickLogout(e)}
                 variant="outline"
-                className="text-sm font-semibold flex gap-2 items-center"
+                className="text-sm font-semibold flex gap-2 items-center border-none"
               >
-                <>
-                  <span>
-                    <option.icon className="fill-accent-5" width={'20px'} />
-                  </span>
-                  {<option.label />}
-                </>
+                <span>
+                  <DarkMode className="fill-accent-5" width={'20px'} />
+                </span>
+                Sign Out
               </Button>
-            ))}
-            <form method="POST" action="#" role="none">
-              <button
-                type="submit"
-                className="block px-1 py-2 text-left text-sm"
-                role="menuitem"
-                tabIndex={1}
-                id="menu-item-3"
-              >
-                Sign out
-              </button>
-            </form>
+            )}
           </div>
         </div>
       )}

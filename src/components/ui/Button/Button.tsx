@@ -6,7 +6,7 @@ import {
 } from 'react';
 import cn from 'clsx';
 import s from './Button.module.css';
-import { LoadingSpinner } from '../LoadingSpinner';
+import { Spinner } from '../Spinner';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
@@ -65,7 +65,7 @@ export const Button: React.FC<ButtonProps> = forwardRef((props, buttonRef) => {
       {children}
       {loading && (
         <i className="pl-2 m-0 flex">
-          <LoadingSpinner />
+          <Spinner />
         </i>
       )}
     </Component>

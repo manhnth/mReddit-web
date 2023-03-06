@@ -5,6 +5,11 @@ import { InputField } from '../common/InputField';
 import { Button } from '../ui/Button';
 import redditLogo from '@/assets/reddit2.png';
 import { useUI } from '../ui/context';
+import { useMutation } from 'react-query';
+import { Spinner } from '../ui/Spinner';
+import { signUp } from '@/lib/auth/auth';
+import { queryClient } from '@/App';
+import { setTokens } from '@/utils/token';
 
 const SignUpSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
@@ -15,10 +20,15 @@ const SignUpSchema = Yup.object().shape({
     .required('Required'),
 });
 
-interface LoginViewProps {}
-
-export const SignUpView: React.FC<LoginViewProps> = ({}) => {
-  const { setModalView } = useUI();
+export const SignUpView: React.FC = () => {
+  const { setModalView, closeModal } = useUI();
+  const { isLoading, mutate, error } = useMutation(signUp, {
+    onSuccess: (data) => {
+      setTokens(data.tokens);
+      queryClient.invalidateQueries('user');
+      setTimeout(() => closeModal(), 1000);
+    },
+  });
 
   return (
     <div className="max-w-xs w-screen pt-4 pb-6 px-8">
@@ -35,27 +45,26 @@ export const SignUpView: React.FC<LoginViewProps> = ({}) => {
       <Formik
         initialValues={{ email: '', password: '', username: '' }}
         validationSchema={SignUpSchema}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-
-            setSubmitting(false);
-          }, 400);
+        onSubmit={(values) => {
+          mutate(values);
         }}
       >
-        {({ isSubmitting }) => (
+        {() => (
           <Form className="flex flex-col mt-4 w-full">
-            {/* <Field as="input" type="email" name="email" placeholder="email" /> */}
-            {/* <ErrorMessage name="email" component="div" /> */}
-            <InputField label="Username" name="email" />
-            <InputField label="Username" name="username" />
-            <InputField label="Password" name="password" />
+            <InputField label="Username" name="username" type={'text'} />
+            <InputField label="Username" name="email" type={'email'} />
+            <InputField label="Password" name="password" type={'password'} />
+            {error ? (
+              <div className="font-thin text-red mt-2">
+                {(error as any).response.data.message}
+              </div>
+            ) : null}
             <Button
               variant="pill"
-              disabled={isSubmitting}
-              className="py-2 text-sm"
+              disabled={isLoading}
+              className="py-2 text-sm mt-6"
             >
-              Sign Up
+              {isLoading ? <Spinner /> : 'Sign Up'}
             </Button>
             <div className="flex gap-1 text-sm mt-4">
               Already a redditor?

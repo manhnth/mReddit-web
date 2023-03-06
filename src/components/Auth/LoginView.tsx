@@ -1,23 +1,32 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
 import { InputField } from '../common/InputField';
 import { Button } from '../ui/Button';
 import redditLogo from '@/assets/reddit2.png';
 import { useUI } from '../ui/context';
+import { useMutation } from 'react-query';
+import { Spinner } from '../ui/Spinner';
+import { login } from '@/lib/auth/auth';
+import { queryClient } from '@/App';
+import { setTokens } from '@/utils/token';
+import { useNavigate } from 'react-router-dom';
 
-const LoginSchema = Yup.object().shape({
-  email: Yup.string().email('Invalid email').required('Required'),
-  password: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-});
-
-interface LoginViewProps {}
-
-export const LoginView: React.FC<LoginViewProps> = ({}) => {
-  const { setModalView } = useUI();
+export const LoginView: React.FC = ({}) => {
+  const { setModalView, closeModal } = useUI();
+  const navigate = useNavigate();
+  const { error, isLoading, mutate } = useMutation(login, {
+    onSuccess: async (data) => {
+      setTokens(data.tokens);
+      Promise.all([
+        // queryClient.invalidateQueries({ queryKey: ['user'] }),
+        queryClient.invalidateQueries({ queryKey: ['feed'] }),
+      ]);
+      setTimeout(() => {
+        closeModal();
+      }, 1000);
+      navigate('/');
+    },
+  });
 
   return (
     <div className="max-w-xs w-screen pt-4 pb-6 px-8">
@@ -32,21 +41,31 @@ export const LoginView: React.FC<LoginViewProps> = ({}) => {
       </div>
 
       <Formik
-        initialValues={{ email: '', password: '' }}
-        validationSchema={LoginSchema}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-
-            setSubmitting(false);
-          }, 400);
+        initialValues={{ username: '', password: '' }}
+        onSubmit={(values) => {
+          mutate(values);
         }}
       >
-        {({ isSubmitting }) => (
+        {() => (
           <Form className="flex flex-col mt-4 w-full">
-            <InputField label="Username" name="email" />
-            <InputField label="Password" name="password" />
-            <div className="flex gap-1 text-sm mb-6">
+            <InputField
+              label="Username"
+              name="username"
+              type={'text'}
+              required
+            />
+            <InputField
+              label="Password"
+              name="password"
+              type={'password'}
+              required
+            />
+            {error ? (
+              <div className="font-thin text-red mt-2">
+                {(error as any).response.data.message}
+              </div>
+            ) : null}
+            <div className="flex gap-1 text-sm mb-8 mt-6">
               Forget your
               <Button variant="link">username</Button> or
               <Button
@@ -59,10 +78,10 @@ export const LoginView: React.FC<LoginViewProps> = ({}) => {
             </div>
             <Button
               variant="pill"
-              disabled={isSubmitting}
+              disabled={isLoading}
               className="py-2 text-sm"
             >
-              Log In
+              {isLoading ? <Spinner /> : 'Log In'}
             </Button>
             <div className="flex gap-1 text-sm mt-4">
               New to Reddit?

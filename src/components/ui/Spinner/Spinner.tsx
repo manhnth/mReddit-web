@@ -1,13 +1,11 @@
 import React from 'react';
 
-interface LoadingSpinnerProps {}
-
-export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({}) => {
+export const Spinner: React.FC = () => {
   return (
     <div role="status">
       <svg
         aria-hidden="true"
-        className="w-5 h-5 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+        className="w-5 h-5 mr-2 text-white dark:text-sky-700 animate-spin fill-accent-5 dark:fill-accent-2"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +19,6 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({}) => {
           fill="currentFill"
         />
       </svg>
-      <span className="sr-only">Loading...</span>
     </div>
   );
 };

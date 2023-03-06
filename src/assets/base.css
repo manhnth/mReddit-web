@@ -23,7 +23,7 @@
   --accent-0: #000;
   --cyan: #22b8cf;
   --green: hsl(151, 54%, 46%);
-  --red: #da3c3c;
+  --red: #fca5a5;
   --purple: #f81ce5;
   --blue: #0070f3;
   --pink: #ff0080;
@@ -44,7 +44,7 @@ html[data-theme='dark'] {
   --hover-1: rgba(255, 255, 255, 0.15);
   --hover-2: rgba(255, 255, 255, 0.25);
   --selection: var(--purple);
-  --text-base: white;
+  --text-base: #d7dadc;
   --text-primary: white;
   --text-secondary: black;
   --accent-0: #fff;
@@ -55,7 +55,7 @@ html[data-theme='dark'] {
   --accent-5: #666666;
   --accent-6: #444444;
   --accent-7: #333333;
-  --accent-8: #111111;
+  --accent-8: #151516;
   --accent-9: #000;
 }
 

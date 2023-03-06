@@ -6,7 +6,7 @@ interface SearchBarProps {}
 
 export const SearchBar: React.FC<SearchBarProps> = ({}) => {
   return (
-    <form className="flex items-center">
+    <form className="flex items-center max-w-xl">
       <label htmlFor="simple-search" className="sr-only">
         Search
       </label>
