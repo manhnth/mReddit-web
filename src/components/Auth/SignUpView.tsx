@@ -52,7 +52,7 @@ export const SignUpView: React.FC = () => {
         {() => (
           <Form className="flex flex-col mt-4 w-full">
             <InputField label="Username" name="username" type={'text'} />
-            <InputField label="Username" name="email" type={'email'} />
+            <InputField label="Email" name="email" type={'email'} />
             <InputField label="Password" name="password" type={'password'} />
             {error ? (
               <div className="font-thin text-red mt-2">

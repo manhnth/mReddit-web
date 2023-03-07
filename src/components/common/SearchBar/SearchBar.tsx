@@ -1,12 +1,25 @@
-import { Reddit } from '@/components/icons';
 import { Search } from '@/components/icons/Search';
-import React from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-interface SearchBarProps {}
+export const SearchBar: React.FC = ({}) => {
+  const [query, setQuery] = useState('');
+  const navigate = useNavigate();
 
-export const SearchBar: React.FC<SearchBarProps> = ({}) => {
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setQuery(() => e.target.value);
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    navigate(`/search?q=${query}`);
+  };
+
   return (
-    <form className="flex items-center max-w-xl">
+    <form
+      onSubmit={(e) => handleSubmit(e)}
+      className="flex items-center max-w-xl"
+    >
       <label htmlFor="simple-search" className="sr-only">
         Search
       </label>
@@ -15,9 +28,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({}) => {
           <Search />
         </div>
         <input
+          name="search"
           type="text"
           className="bg-accent-8 border border-accent-7 text-accent-1 text-sm rounded-lg block w-full pl-10 p-2.5 focus:border-secondary outline-secondary"
           placeholder="Search"
+          onChange={(e) => handleOnChange(e)}
           required
         />
       </div>

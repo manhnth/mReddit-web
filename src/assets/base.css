@@ -7,13 +7,13 @@
   --selection: var(--cyan);
   --text-base: #000000;
   --text-primary: #000000;
-  --text-secondary: white;
+  --text-secondary: #0ea5e9;
   --hover: rgba(0, 0, 0, 0.075);
   --hover-1: rgba(0, 0, 0, 0.15);
   --hover-2: rgba(0, 0, 0, 0.25);
   --accent-9: #fff;
   --accent-8: #fafafa;
-  --accent-7: #eaeaea;
+  --accent-7: #cbd5e1;
   --accent-6: #999999;
   --accent-5: #888888;
   --accent-4: #666666;
@@ -23,7 +23,7 @@
   --accent-0: #000;
   --cyan: #22b8cf;
   --green: hsl(151, 54%, 46%);
-  --red: #fca5a5;
+  --red: #dc2626;
   --purple: #f81ce5;
   --blue: #0070f3;
   --pink: #ff0080;
@@ -46,7 +46,7 @@ html[data-theme='dark'] {
   --selection: var(--purple);
   --text-base: #d7dadc;
   --text-primary: white;
-  --text-secondary: black;
+  --text-secondary: white;
   --accent-0: #fff;
   --accent-1: #fafafa;
   --accent-2: #eaeaea;

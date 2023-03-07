@@ -17,9 +17,17 @@ export const deletePost = async (self: string) => {
   return axiosWToken.delete(self);
 };
 
-//***** QUERY *****/
+export const vote = async ({
+  self,
+  value,
+}: {
+  self: string;
+  value: number;
+}) => {
+  await axiosWToken.post(`${self}/vote`, { value });
+};
 
-const search = () => axiosApi.get('post/search');
+//***** QUERY *****/
 
 interface UpdatePostData {
   self: string;
@@ -42,12 +50,12 @@ export const getPostQuery = (postId: string) => ({
   queryKey: ['post', postId],
   queryFn: async () => {
     const post = await getPostById(postId);
-    // if (!contact) {
-    //   throw new Response('', {
-    //     status: 404,
-    //     statusText: 'Not Found',
-    //   });
-    // }
     return post || null;
   },
 });
+
+export const search = async (query: string) => {
+  const result = await axiosWToken.get(`/post/search?q=${query}`);
+
+  return result.data.posts;
+};

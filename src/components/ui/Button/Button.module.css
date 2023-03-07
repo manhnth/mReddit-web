@@ -7,7 +7,7 @@
 }
 
 .outline {
-  @apply bg-transparent text-base font-semibold border border-accent-0 hover:border-transparent rounded;
+  @apply bg-transparent text-secondary font-semibold border border-secondary hover:border-transparent rounded-full;
 }
 
 .pill {

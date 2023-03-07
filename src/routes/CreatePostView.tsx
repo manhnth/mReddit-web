@@ -24,7 +24,7 @@ export const action =
 
     const createdPost = await createPost(data);
 
-    queryClient.invalidateQueries({ queryKey: [''] });
+    queryClient.invalidateQueries({ queryKey: ['feed'] });
     return redirect(`/${createdPost.self}`);
   };
 

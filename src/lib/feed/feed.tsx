@@ -1,6 +1,5 @@
 import { axiosApi, axiosWToken } from '@/lib/axios';
 import { getRefreshToken, setTokens } from '@/utils/token';
-import { QueryClient } from 'react-query';
 import { FeedResponse } from './type';
 
 export const me = () =>
@@ -26,8 +25,6 @@ export const getGlobalFeed = (param?: string, page?: number) =>
   axiosWToken
     .get(`feed/?sort_by=${param || ''}&page=${page}`)
     .then<FeedResponse>((res) => {
-      console.log('real params', param);
-
       return res.data;
     });
 

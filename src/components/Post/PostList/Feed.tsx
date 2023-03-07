@@ -34,8 +34,6 @@ export const Feed = () => {
     {
       // getPreviousPageParam: (firstPage) => firstPage.page ?? undefined,
       getNextPageParam: (lastPage) => {
-        console.log('next page', lastPage.nextPage);
-
         return lastPage.nextPage || undefined;
       },
     }
@@ -49,7 +47,9 @@ export const Feed = () => {
 
   return (
     <div className="max-w-2xl w-full mx-2">
-      <div className="pb-2">sort by</div>
+      <div className="pb-2">
+        {params?.sort === 'hot' ? 'Hot posts' : 'New posts'}
+      </div>
       <div className="bg-primary mb-4 flex p-2">
         <Link to={'../hot'}>
           <Button

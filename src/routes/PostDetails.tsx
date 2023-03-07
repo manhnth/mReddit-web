@@ -1,18 +1,20 @@
 import { Button } from '@/components/ui/Button';
 import { getUserQuery } from '@/lib/auth';
-import { deletePost, getPostQuery } from '@/lib/post/post';
+import { deletePost, getPostQuery, vote } from '@/lib/post/post';
 import { formatMovementDate, formatNb, truncateText } from '@/utils/util';
-import React from 'react';
+import React, { useState } from 'react';
 import { BiUpvote, BiDownvote } from 'react-icons/bi';
 import { FaRegCommentAlt } from 'react-icons/fa';
 import ReactMarkdown from 'react-markdown';
-import { QueryClient, useQuery } from 'react-query';
+import { QueryClient, useMutation, useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import MdEditor from 'react-markdown-editor-lite';
-import { HtmlType } from 'react-markdown-editor-lite/cjs/editor/preview';
 import MarkdownIt from 'markdown-it';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 import { useUI } from '@/components/ui/context';
+import { queryClient } from '@/App';
+import cn from 'clsx';
+import { createCmt, deleteCmt } from '@/lib/comment';
 
 export const loader =
   (queryClient: QueryClient) =>
@@ -27,7 +29,15 @@ export const loader =
 interface PostDetailsData {
   author: { name: string; self: string };
   authorId: number;
-  comment?: any;
+  comments?: {
+    self: string;
+    isOwner: boolean;
+    text: string;
+    owner: {
+      name: string;
+      self: string;
+    };
+  }[];
   createAt: string;
   id: number;
   isOwner: boolean;
@@ -39,7 +49,7 @@ interface PostDetailsData {
   text: string;
   title: string;
   updateAt: string;
-  updoots: any;
+  userUpdoot: any;
   voteStatus: number;
   nbComments: number;
 }
@@ -47,10 +57,21 @@ interface PostDetailsData {
 export const PostDetails: React.FC = (props) => {
   const mdParser = new MarkdownIt(/* Markdown-it options */);
   const { openModal, setModalView } = useUI();
+  const [cmt, setCmt] = useState('');
+
   const params = useParams();
   const navigate = useNavigate();
 
   const { isLoading: isUserLoading } = useQuery(getUserQuery());
+  const { mutate: votePost } = useMutation(vote, {
+    onSuccess: () => queryClient.invalidateQueries(['post', params.postId]),
+  });
+  const { mutate: deleteComment } = useMutation(deleteCmt, {
+    onSuccess: () => queryClient.invalidateQueries(['post', params.postId]),
+  });
+  const { mutate: postCmt } = useMutation(createCmt, {
+    onSuccess: () => queryClient.invalidateQueries(['post', params.postId]),
+  });
 
   const { data } = useQuery({
     ...getPostQuery(params.postId as string),
@@ -72,9 +93,9 @@ export const PostDetails: React.FC = (props) => {
     text,
     title,
     updateAt,
-    updoots,
+    userUpdoot,
     voteStatus,
-    comment,
+    comments,
     nbComments,
   } = post;
 
@@ -89,6 +110,11 @@ export const PostDetails: React.FC = (props) => {
       navigate('/');
     } catch (error) {}
   };
+
+  function handleCmtChange({ html, text }: any) {
+    setCmt(text);
+    console.log('handleCmtChange', cmt);
+  }
 
   return (
     <div>
@@ -116,7 +142,7 @@ export const PostDetails: React.FC = (props) => {
             </div>
             {/* content */}
             <div className="mt-1">
-              <h2 className="font-semibold text-accent-2">
+              <h2 className="font-semibold text-accent-2 mb-2">
                 {truncateText(title)}
               </h2>
               <ReactMarkdown children={truncateText(text, 200)}></ReactMarkdown>
@@ -127,14 +153,22 @@ export const PostDetails: React.FC = (props) => {
               <div className="flex self-end gap-1">
                 <BiUpvote
                   size={15}
-                  className="hover:fill-red hover:cursor-pointer"
+                  className={cn(
+                    'hover:fill-red hover:cursor-pointer',
+                    userUpdoot?.value === 1 ? 'fill-red' : ''
+                  )}
+                  onClick={() => votePost({ self, value: 1 })}
                 />
                 <span className="text-accent-2 font-semibold">
                   {formatNb(point)}
                 </span>
                 <BiDownvote
                   size={15}
-                  className="hover:cursor-pointer hover:fill-blue"
+                  className={cn(
+                    'hover:fill-blue hover:cursor-pointer',
+                    userUpdoot?.value === -1 ? 'fill-blue' : ''
+                  )}
+                  onClick={() => votePost({ self, value: -1 })}
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -172,19 +206,55 @@ export const PostDetails: React.FC = (props) => {
               name="text"
               // ref={mdEditor}
               renderHTML={(text) => mdParser.render(text)}
-              // onChange={handleEditorChange}
+              onChange={handleCmtChange}
               className="h-48"
             />
-          </div>
-          <div className="py-24">
-            <div className="text-accent-5 flex flex-col items-center">
-              {!comment[0] && (
-                <>
-                  <h4>No Comments Yet</h4>
-                  <p>Be the first to share what you think!</p>
-                </>
-              )}
+            <div className="flex justify-end mt-2">
+              <Button
+                disabled={!cmt}
+                onClick={() => postCmt({ self: self, text: cmt })}
+                variant="pill"
+                className="px-2 py-1"
+              >
+                Post
+              </Button>
             </div>
+          </div>
+          <div>
+            {!comments ||
+              (!comments[0] && (
+                <div className="text-accent-5 flex flex-col items-center py-24">
+                  <>
+                    <h4>No Comments Yet</h4>
+                    <p>Be the first to share what you think!</p>
+                  </>
+                </div>
+              ))}
+            {comments &&
+              comments.map((c, i) => {
+                return (
+                  <div className="px-10 py-5" key={i}>
+                    <h5 className="text-xs">
+                      <span className="font-semibold">{`u/${c.owner.name}`}</span>{' '}
+                      said:
+                    </h5>
+                    {/* <p className="text-sm pl-2">{c.text}</p> */}
+                    <ReactMarkdown className="text-xs pl-2 pt-1">
+                      {c.text}
+                    </ReactMarkdown>
+                    {c.isOwner && (
+                      <div
+                        className="flex gap-1 text-sm hover:cursor-pointer items-center hover:text-red mt-2 mb-1"
+                        onClick={() => deleteComment(c.self)}
+                      >
+                        <AiOutlineDelete size={15} />
+                        {' remove'}
+                      </div>
+                    )}
+                    <hr />
+                  </div>
+                );
+              })}
           </div>
         </div>
       </div>

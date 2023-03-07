@@ -12,7 +12,7 @@ import { setTokens } from '@/utils/token';
 import { useNavigate } from 'react-router-dom';
 
 export const LoginView: React.FC = ({}) => {
-  const { setModalView, closeModal } = useUI();
+  const { setModalView, closeModal, openModal } = useUI();
   const navigate = useNavigate();
   const { error, isLoading, mutate } = useMutation(login, {
     onSuccess: async (data) => {
@@ -38,6 +38,11 @@ export const LoginView: React.FC = ({}) => {
           width={'45px'}
         />
         <h1 className="font-semibold font-sans text-xl">Log In</h1>
+        <div className="flex flex-col text-xs w-fit p-1 text-green border border-green">
+          <h4>test account</h4>
+          <p>user name: test</p>
+          <p>password: 123456</p>
+        </div>
       </div>
 
       <Formik
@@ -86,7 +91,11 @@ export const LoginView: React.FC = ({}) => {
             <div className="flex gap-1 text-sm mt-4">
               New to Reddit?
               <Button
-                onClick={() => setModalView('SIGNUP_VIEW')}
+                type="button"
+                onClick={() => {
+                  openModal();
+                  setModalView('SIGNUP_VIEW');
+                }}
                 variant="link"
               >
                 Sign Up

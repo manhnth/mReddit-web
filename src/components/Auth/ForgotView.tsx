@@ -3,9 +3,8 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { InputField } from '../common/InputField';
 import { Button } from '../ui/Button';
-import redditLogo from '@/assets/reddit.png';
+import redditLogo from '@/assets/reddit2.png';
 import { useUI } from '../ui/context';
-import { Link } from 'react-router-dom';
 
 const ForgotSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
@@ -19,17 +18,15 @@ export const ForgotView: React.FC<LoginViewProps> = ({}) => {
   return (
     <div className="max-w-xs w-screen pt-4 pb-6 px-8">
       <div className="flex justify-center flex-col items-center gap-8">
-        <Link to="../" className="">
-          <img
-            src={redditLogo}
-            className="logo reddit"
-            alt="Reddit logo"
-            width={'45px'}
-          />
-        </Link>
+        <img
+          src={redditLogo}
+          className="logo reddit"
+          alt="Reddit logo"
+          width={'45px'}
+        />
         <h1 className="font-semibold font-sans text-xl">Reset your password</h1>
+        <div>Ongoing...</div>
       </div>
-
       <Formik
         initialValues={{ email: '', password: '' }}
         validationSchema={ForgotSchema}
@@ -47,7 +44,7 @@ export const ForgotView: React.FC<LoginViewProps> = ({}) => {
             <Button
               variant="pill"
               disabled={isSubmitting}
-              className="py-2 text-sm"
+              className="py-2 text-sm mt-6"
             >
               Email me
             </Button>

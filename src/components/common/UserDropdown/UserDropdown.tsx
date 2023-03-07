@@ -65,7 +65,7 @@ export const UserNav: React.FC<UserNavProps> = ({}) => {
           <div className="py-1" role="none">
             <Button
               variant="outline"
-              className="text-sm font-semibold flex gap-2 items-center border-none"
+              className="text-sm font-semibold flex gap-2 items-center border-none text-accent-2"
             >
               <>
                 <span>
@@ -78,7 +78,7 @@ export const UserNav: React.FC<UserNavProps> = ({}) => {
               <Button
                 onClick={(e) => clickLogout(e)}
                 variant="outline"
-                className="text-sm font-semibold flex gap-2 items-center border-none"
+                className="text-sm font-semibold flex gap-2 items-center text-accent-2 border-none"
               >
                 <span>
                   <DarkMode className="fill-accent-5" width={'20px'} />

@@ -1,4 +1,5 @@
 export interface Post {
+  id: number;
   author: any;
   createAt: string;
   nbComments: number;
@@ -10,6 +11,7 @@ export interface Post {
   updateAt: string;
   voteStatus: number;
   isOwner: boolean;
+  userUpdoot: any;
 }
 
 export interface FeedResponse {

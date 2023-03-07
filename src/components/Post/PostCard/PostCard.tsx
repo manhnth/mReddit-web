@@ -5,41 +5,75 @@ import { BiUpvote, BiDownvote } from 'react-icons/bi';
 import { FaRegCommentAlt } from 'react-icons/fa';
 import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router-dom';
+import cn from 'clsx';
+import { queryClient } from '@/App';
+import { getPostQuery, vote } from '@/lib/post';
+import { useMutation, useQuery } from 'react-query';
+import { Loading } from '@/components/ui/Loading';
 
 interface PostCardProps {
-  title: string;
-  text: string;
-  subreddit: any;
-  author: any;
-  createAt: string;
-  nbComments: number;
-  point: number;
-  isOwner: boolean;
-  self: string;
+  id: number;
+  // title: string;
+  // text: string;
+  // subreddit: any;
+  // author: any;
+  // createAt: string;
+  // nbComments: number;
+  // point: number;
+  // isOwner: boolean;
+  // self: string;
+  // userUpdoot: any;
 }
 
 export const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
   const {
-    title,
-    text,
-    subreddit,
-    author,
-    createAt,
-    nbComments,
-    point,
-    isOwner,
-    self,
-  } = props;
+    data: post,
+    isFetching,
+    isLoading,
+  } = useQuery(getPostQuery(`${props.id}`));
 
-  return (
-    <>
+  const { mutate: votePost } = useMutation(vote, {
+    onSuccess: () => queryClient.invalidateQueries(['post', `${props.id}`]),
+  });
+
+  // if (isFetching || isLoading) return <Loading />;
+
+  if (post) {
+    const {
+      title,
+      text,
+      subreddit,
+      author,
+      createAt,
+      nbComments,
+      point,
+      isOwner,
+      self,
+      userUpdoot,
+    } = post;
+
+    return (
       <div className="bg-primary mb-3 flex w-full border border-accent-7 hover:border-accent-5 rounded-sm">
         {/* side vote button for large screen */}
         <div className="hidden lg:block w-fit bg-accent-8 p-2">
           <div className="hidden lg:flex flex-col items-center pt-1">
-            <BiUpvote size={20} className="hover:fill-red cursor-pointer" />
+            <BiUpvote
+              size={20}
+              className={cn(
+                'hover:fill-red hover:cursor-pointer',
+                userUpdoot?.value === 1 ? 'fill-red' : ''
+              )}
+              onClick={() => votePost({ self, value: 1 })}
+            />
             <span className="text-xs">{formatNb(point)}</span>
-            <BiDownvote size={20} className="hover:fill-blue cursor-pointer" />
+            <BiDownvote
+              className={cn(
+                'hover:fill-blue hover:cursor-pointer',
+                userUpdoot?.value === -1 ? 'fill-blue' : ''
+              )}
+              onClick={() => votePost({ self, value: -1 })}
+              size={20}
+            />
           </div>
         </div>
         <div className="w-full p-2">
@@ -75,14 +109,22 @@ export const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
             <div className="flex lg:hidden self-end gap-1">
               <BiUpvote
                 size={15}
-                className="hover:fill-red hover:cursor-pointer"
+                className={cn(
+                  'hover:fill-red hover:cursor-pointer',
+                  userUpdoot?.value === 1 ? 'fill-red' : ''
+                )}
+                onClick={() => votePost({ self, value: 1 })}
               />
               <span className="text-accent-2 font-semibold">
                 {formatNb(point)}
               </span>
               <BiDownvote
                 size={15}
-                className="hover:cursor-pointer hover:fill-blue"
+                className={cn(
+                  'hover:fill-blue hover:cursor-pointer',
+                  userUpdoot?.value === -1 ? 'fill-blue' : ''
+                )}
+                onClick={() => votePost({ self, value: -1 })}
               />
             </div>
             <div className="flex items-center gap-2">
@@ -91,10 +133,12 @@ export const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
                 <div className="w-max">{formatNb(nbComments)} comments</div>
               </Link>
             </div>
-            {isOwner && <p>edit</p>}
+            {/* {isOwner && <p>edit</p>} */}
           </div>
         </div>
       </div>
-    </>
-  );
+    );
+  }
+
+  return <div>ErrorComponent</div>;
 };

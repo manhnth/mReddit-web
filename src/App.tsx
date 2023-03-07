@@ -11,7 +11,8 @@ import { ManagedUIContext } from './components/ui/context';
 import { CreatePostView, action } from './routes/CreatePostView';
 import { Home } from './routes/Home';
 import { PostDetails, loader as postDetailsLoader } from './routes/PostDetails';
-import { LoginView } from './components/Auth';
+import { Search } from './routes/Search';
+import { RequiredLogin } from './routes/RequiredLogin';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,13 +32,15 @@ const router = createBrowserRouter(
           action={action(queryClient)}
           element={<CreatePostView />}
         />
+        <Route path="search" element={<Search />} />
+
         <Route
           index
           path="/post/:postId"
           loader={postDetailsLoader(queryClient)}
           element={<PostDetails />}
         />
-        <Route path="required_login" element={<LoginView />} />
+        <Route path="required_login" element={<RequiredLogin />} />
         <Route
           index
           path="/:sort"
