@@ -36,7 +36,7 @@ export const Feed = () => {
       getNextPageParam: (lastPage) => {
         return lastPage.nextPage || undefined;
       },
-    }
+    },
   );
 
   React.useEffect(() => {
@@ -56,7 +56,7 @@ export const Feed = () => {
             variant="pill"
             className={cn(
               'px-2  py-1 bg-transparent hover:bg-accent-7 text-accent-3',
-              params?.sort === 'hot' ? 'text-base !bg-accent-6' : ''
+              params?.sort === 'hot' ? 'text-base !bg-accent-6' : '',
             )}
           >
             <Hot
@@ -73,7 +73,7 @@ export const Feed = () => {
             variant="pill"
             className={cn(
               'px-2  py-1 bg-transparent hover:bg-accent-7 text-accent-3',
-              params?.sort === 'new' ? 'text-base !bg-accent-6' : ''
+              params?.sort === 'new' ? 'text-base !bg-accent-6' : '',
             )}
           >
             <New
@@ -87,7 +87,7 @@ export const Feed = () => {
         </Link>
       </div>
       {status === 'loading' ? (
-        <p>Loading...</p>
+        <Loading />
       ) : status === 'error' ? (
         <span>Error: {'who'}</span>
       ) : (

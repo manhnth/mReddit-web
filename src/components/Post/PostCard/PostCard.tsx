@@ -61,7 +61,7 @@ export const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
               size={20}
               className={cn(
                 'hover:fill-red hover:cursor-pointer',
-                userUpdoot?.value === 1 ? 'fill-red' : ''
+                userUpdoot?.value === 1 ? 'fill-red' : '',
               )}
               onClick={() => votePost({ self, value: 1 })}
             />
@@ -69,7 +69,7 @@ export const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
             <BiDownvote
               className={cn(
                 'hover:fill-blue hover:cursor-pointer',
-                userUpdoot?.value === -1 ? 'fill-blue' : ''
+                userUpdoot?.value === -1 ? 'fill-blue' : '',
               )}
               onClick={() => votePost({ self, value: -1 })}
               size={20}
@@ -111,7 +111,7 @@ export const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
                 size={15}
                 className={cn(
                   'hover:fill-red hover:cursor-pointer',
-                  userUpdoot?.value === 1 ? 'fill-red' : ''
+                  userUpdoot?.value === 1 ? 'fill-red' : '',
                 )}
                 onClick={() => votePost({ self, value: 1 })}
               />
@@ -122,7 +122,7 @@ export const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
                 size={15}
                 className={cn(
                   'hover:fill-blue hover:cursor-pointer',
-                  userUpdoot?.value === -1 ? 'fill-blue' : ''
+                  userUpdoot?.value === -1 ? 'fill-blue' : '',
                 )}
                 onClick={() => votePost({ self, value: -1 })}
               />
@@ -140,5 +140,5 @@ export const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
     );
   }
 
-  return <div>ErrorComponent</div>;
+  return <div></div>;
 };

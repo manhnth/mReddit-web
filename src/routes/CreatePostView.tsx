@@ -53,6 +53,7 @@ export const CreatePostView: React.FC<CreatePostViewProps> = ({}) => {
         <hr className="my-6 border-accent-3" />
         <Form
           method="post"
+          className="px-4 py-3 bg-primary"
           onSubmit={(event) => {
             // eslint-disable-next-line no-restricted-globals
             // if (!confirm('Please confirm you want to delete this record.')) {

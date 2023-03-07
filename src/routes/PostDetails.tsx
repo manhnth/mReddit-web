@@ -15,6 +15,7 @@ import { useUI } from '@/components/ui/context';
 import { queryClient } from '@/App';
 import cn from 'clsx';
 import { createCmt, deleteCmt } from '@/lib/comment';
+import { Spinner } from '@/components/ui/Spinner';
 
 export const loader =
   (queryClient: QueryClient) =>
@@ -69,7 +70,7 @@ export const PostDetails: React.FC = (props) => {
   const { mutate: deleteComment } = useMutation(deleteCmt, {
     onSuccess: () => queryClient.invalidateQueries(['post', params.postId]),
   });
-  const { mutate: postCmt } = useMutation(createCmt, {
+  const { mutate: postCmt, isLoading } = useMutation(createCmt, {
     onSuccess: () => queryClient.invalidateQueries(['post', params.postId]),
   });
 
@@ -155,7 +156,7 @@ export const PostDetails: React.FC = (props) => {
                   size={15}
                   className={cn(
                     'hover:fill-red hover:cursor-pointer',
-                    userUpdoot?.value === 1 ? 'fill-red' : ''
+                    userUpdoot?.value === 1 ? 'fill-red' : '',
                   )}
                   onClick={() => votePost({ self, value: 1 })}
                 />
@@ -166,7 +167,7 @@ export const PostDetails: React.FC = (props) => {
                   size={15}
                   className={cn(
                     'hover:fill-blue hover:cursor-pointer',
-                    userUpdoot?.value === -1 ? 'fill-blue' : ''
+                    userUpdoot?.value === -1 ? 'fill-blue' : '',
                   )}
                   onClick={() => votePost({ self, value: -1 })}
                 />
@@ -216,7 +217,7 @@ export const PostDetails: React.FC = (props) => {
                 variant="pill"
                 className="px-2 py-1"
               >
-                Post
+                {isLoading ? <Spinner /> : 'Post'}
               </Button>
             </div>
           </div>

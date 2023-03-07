@@ -32,7 +32,7 @@ axiosWToken.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 axiosWToken.interceptors.response.use(
@@ -57,8 +57,10 @@ axiosWToken.interceptors.response.use(
         return axiosWToken(config);
       })
       .catch((error) => {
-        window.location.href = '/required_login';
+        if (config.url !== 'auth/me') {
+          window.location.href = '/required_login';
+        }
         return Promise.reject(error);
       });
-  }
+  },
 );
