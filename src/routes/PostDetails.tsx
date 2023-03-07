@@ -143,10 +143,8 @@ export const PostDetails: React.FC = (props) => {
             </div>
             {/* content */}
             <div className="mt-1">
-              <h2 className="font-semibold text-accent-2 mb-2">
-                {truncateText(title)}
-              </h2>
-              <ReactMarkdown children={truncateText(text, 200)}></ReactMarkdown>
+              <h2 className="font-semibold text-accent-2 mb-2">{text}</h2>
+              <ReactMarkdown children={text}></ReactMarkdown>
             </div>
             {/* footer card */}
             <div className="flex gap-3 items-center text-xs text-accent-4 mt-6">
