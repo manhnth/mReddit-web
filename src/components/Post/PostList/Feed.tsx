@@ -27,7 +27,7 @@ export const Feed = () => {
     hasPreviousPage,
   } = useInfiniteQuery(
     ['feed', params.sort],
-    async ({ pageParam = 0 }) => {
+    async ({ pageParam = 1 }) => {
       const res = await getGlobalFeed(params.sort as string, pageParam);
       return res;
     },
