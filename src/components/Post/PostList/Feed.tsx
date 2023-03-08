@@ -34,6 +34,8 @@ export const Feed = () => {
     {
       // getPreviousPageParam: (firstPage) => firstPage.page ?? undefined,
       getNextPageParam: (lastPage) => {
+        console.log('last page', lastPage);
+
         return lastPage.nextPage || undefined;
       },
     },

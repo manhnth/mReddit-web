@@ -40,7 +40,7 @@ axiosWToken.interceptors.response.use(
   (error) => {
     const { response, config } = error;
 
-    if (response.status !== 401) {
+    if (response.status !== 401 || response.status === 500) {
       return Promise.reject(error);
     }
 
